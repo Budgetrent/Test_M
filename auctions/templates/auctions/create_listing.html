@@ -1,0 +1,66 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <div class="shadow-lg p-3 mb-5 bg-body-tertiary rounded" >
+      <h2 style="font-family: 'Courier New', Courier, monospace;">Create Listing</h2>
+    <div class="row row-cols-1 row-cols-md-2 g-4;" style="padding: 10px; padding-left: 33%; display: flex; flex-wrap: wrap; align-items: stretch">
+        <div class="shadow-lg p-3 mb-5 bg-body-tertiary rounded">
+          <h2 style="font-family: 'Courier New', Courier, monospace;">Create</h2>
+
+        <form class="row g-3" action="{% url 'create' %}" method="POST">
+            {% csrf_token %}
+            <div class="col-md-6">
+              <label for="inputEmail4" class="form-label">Name</label>
+              <input type="text" class="form-control" id="inputEmail4" name="listingName" required>
+            </div>
+            <div class="col-12">
+              <label for="inputAddress" class="form-label">Province</label>
+              <input type="text" class="form-control" id="inputAddress" placeholder="Province" name="listingProvince" required>
+            </div>
+            <div class="col-12">
+              <label for="inputAddress2" class="form-label">City </label>
+              <input type="text" class="form-control" id="inputAddress2" placeholder="City" name="listingCity" required>
+            </div>
+            <div class="col-md-6">
+              <label for="inputCity" class="form-label">Adress</label>
+              <input type="text" class="form-control" id="inputCity" name="listingStreet" placeholder="street address" required>
+            </div>
+            <div class="col-md-4" style="padding-top: 5%;">
+              <label for="inputState" class="form-label">Category</label>
+              <select id="inputState" class="form-select" name="options" required>
+                <option value="House">House</option>
+                    <option value="Apartment">Apartment</option>
+                    <option value="Studio">Sudio</option>
+              </select>
+            </div>
+            
+            <div class="col-12">
+                <label for="floatingTextarea2"> Description</label>
+                <textarea class="form-control" placeholder="Short description..." id="floatingTextarea2" style="height: 100px" name="listingDescription" required></textarea>
+            </div>
+            <div class="col-md-6">
+                <label for="inputCity" class="form-label">Year constructed</label>
+                <input type="number" class="form-control" id="inputCity" name="listingYear" min="1000" max="2050" placeholder="year" required>
+              </div>
+
+            <div class="col-md-2">
+                <label for="inputZip" class="form-label">m<sup>3</sup></label>
+                <input type="number" class="form-control" id="inputZip" name="listingSize" min="1" required>
+              </div>
+              <div class="col-12">
+                <label for="inputAddress2" class="form-label">Image-url </label>
+                <input type="text" class="form-control" id="inputAddress2" placeholder="URL link" name="listingPhoto" required>
+              </div>
+              <div class="col-md-6">
+                <label for="inputCity" class="form-label">Price</label>
+                <input type="number" class="form-control" id="inputCity" name="listingPrice" min="1" placeholder="price" required>
+              </div>
+
+            <div class="col-12" style="padding-top: 10px;">
+              <button type="submit" class="btn btn-primary">Create</button>
+            </div>
+
+          </form>
+        </div>
+    </div>
+{% endblock %}

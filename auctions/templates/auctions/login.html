@@ -1,0 +1,29 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<div class="shadow-lg p-3 mb-5 bg-body-tertiary rounded;" style="min-height: 850px;" >
+    <h2 style="font-family: 'Courier New', Courier, monospace;">Login page</h2>
+    <div class="row row-cols-1 row-cols-md-2 g-4;" style="padding: 10px; padding-left: 33%; display: flex; flex-wrap: wrap; align-items: stretch; padding-top: 5%;">
+        <div class="shadow-lg p-3 mb-5 bg-body-tertiary rounded">
+            <h2 style="font-family: 'Courier New', Courier, monospace; padding-bottom: 20px;">Login</h2>
+    {% if message %}
+        <div>{{ message }}</div>
+    {% endif %}
+
+    <form action="{% url 'login' %}" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <input autofocus class="form-control" type="text" name="username" placeholder="Username">
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="password" name="password" placeholder="Password">
+        </div>
+        <input class="btn btn-primary" type="submit" value="Login">
+    </form>
+
+    <h6 style="padding-top: 20px;">Don't have an account? <a href="{% url 'register' %}">Register here.</a></h6>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

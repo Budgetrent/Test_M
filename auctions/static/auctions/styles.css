@@ -1,0 +1,23 @@
+body {
+    padding: 10px;
+}
+
+@keyframes fadeOut {
+    0% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { opacity: 0; visibility: hidden;}
+}
+
+.alert.auto-close {
+    animation: fadeOut 3s ease-in;
+    opacity: 1;
+    
+}
+
+
+.row-cols-1 {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch; 
+}
+

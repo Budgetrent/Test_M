@@ -1,0 +1,109 @@
+{% extends "auctions/layout.html" %}
+{% load static %}
+
+{% block styles %}
+  <link rel="stylesheet" href="{% static 'auctions/styles.css' %}">
+{% endblock %}
+
+{% block body %}
+    <div class="shadow-lg p-3 mb-5 bg-body-tertiary rounded" >
+      <h2  style="font-family: 'Courier New', Courier, monospace;">Listing Page</h2>
+      <div class="row row-cols-1 row-cols-md-3 g-4;" style="padding: 10px;">
+        <div class="col"  >
+          <div class="card" style="display: flex; flex-direction: column; padding: 5px; margin: 20px; margin-bottom: 5px; box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+            <img src="{{ listing.photo }}" class="card-img-top" alt="Listing Photo" style="object-fit: cover; height: 60%; width: auto; max-width: 100%;">
+              <div class="card-body">
+              <h5 class="card-title" style="font-size: 1.25rem;">{{listing.name}}</h5>
+              <p style="font-size: 0.875rem;">{{listing.description}}</p>
+              <hr>
+              <!-- checkiong if current user is in the listing watchlist -->
+              {% if user.is_authenticated %}
+                {% if request.user not in listing.watchlist.all and listing.isActive%}
+                  <form action="{% url 'addWatchlist' id=listing.id%}">
+                    <button type="submit" class="btn btn-secondary">Add watchlist</button>                      
+                  </form>
+                {%elif listing.isActive%}
+                  <form action="{% url 'removeWatchlist' id=listing.id%}">
+                    <button type="submit" class="btn btn-secondary">Remove</button>   
+                  </form>     
+                {% endif %}
+                  {% if user == listing.owner and listing.isActive %}
+                  <form action="{% url 'closeListing' id=listing.id %}">
+                  <div style="padding-left: 70%;">
+                      <button >Close auction</button>
+                    </div>
+                  </form>
+                  {% endif %}
+                {% endif %}
+                </div>
+              </div>              
+            </div>
+            <div class="row row-cols-1 row-cols-md-1 g-4;" style="padding: 0px;" >
+              <div class="col">
+                <div class="card" style="display: flex; flex-direction: column; padding: 5px; margin: 20px; margin-bottom: 5px; border: 0.1px">
+                  <div class="card-body">
+                  <h5 class="card-title" style="font-size: 1.25rem;"><strong>Owner:</strong> {{listing.owner}}</h5>
+                  <p style="font-size: 0.875rem;"><strong>Category:</strong> {{listing.category}}</p>
+                  <p style="font-size: 0.875rem;"><strong>Province:</strong> {{listing.location.province}}</p>
+                  <p style="font-size: 0.875rem;"><strong>Town:</strong> {{listing.location.city}}</p>
+                  <p style="font-size: 0.875rem;"><strong>Street:</strong> {{listing.location.street}}</p>
+                  <p style="font-size: 0.875rem;"><strong>Year constructed: </strong> {{listing.year}}</p>
+                  <p style="font-size: 0.875rem;"><strong>m<sup>3</sup>: </strong> {{listing.square_meters}}</p>
+                  <br>
+                  {% if listing.price.user == none %}
+                    <p style="font-size: 0.875rem;"><strong>Bid: </strong> {{listing.price.bid}} $
+                  {% endif %}
+                    {% if listing.price.user != none %}
+                    <p style="font-size: 0.875rem;"><strong>Latest bid: </strong> {{listing.price.bid}} $
+                    ,by: <strong>{{listing.price.user}}</strong>
+                  {% endif %}
+                  </p>
+                  <hr>
+                  {% if user.is_authenticated and listing.isActive %}
+                  <form class="form-floating" style="display: flex; align-items: center;" action="{% url 'addBid' id=listing.id %}" method="POST">
+                  {% csrf_token %}
+                    <input style="width: 50%;" type="number" class="form-control" id="floatingInputValue" placeholder="..." name="user_Bid" min="0" >
+                      <button type="submit" class="btn btn-primary" style="margin-left: 10px;">Place Bid</button>   
+                  </form>
+                  {% if messageE %}
+                  <div class="alert alert-danger" role="alert">
+                    {{messageE}}
+                  </div>
+                  {% endif %}
+                  {% if messageW %}
+                  <div class="alert alert-success" role="alert">
+                    {{ messageW }}
+                  </div>
+                  {% endif %}
+                  {% if messageA %}
+                  <div class="alert alert-warning auto-close" role="alert" >
+                    {{ messageA }}
+                  </div>
+                  {% endif %}
+                  
+                  <form action="{% url 'addComment' id=listing.id%}" method="POST">
+                  {% csrf_token %}
+                  <div class="form-floating" style="padding-top: 10px;">
+                    <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px" name="userComment" required></textarea>
+                    <label for="floatingTextarea2"></label>
+                    <div style="padding-left: 77%">
+                      <button type="submit" class="btn btn-secondary">Comment</button>
+                    </div>
+                  </div>
+                  </form>
+                  {% endif %}                      
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="shadow p-3 mb-5 bg-body-tertiary rounded" style="background-color: aliceblue; max-height: 600px; ">Comment section
+          <hr>
+            <div class="shadow-none p-3 mb-5 bg-body-tertiary rounded" style="background-color: aliceblue; max-height: 500px; overflow-y: auto; ">
+            {% for comment in comments %}
+              <div class="shadow-sm p-2 mb-2 bg-body-tertiary rounded" style="background-color: white; "><strong>{{comment.user}}</strong> <br>{{comment.comment}}</div>
+            {% endfor %}
+              </div>             
+           </div>
+         </div>      
+      </div>
+{% endblock %}
